@@ -1,0 +1,19 @@
+INDIA POST UPDATES — MOBILE SETUP (HINDI)
+
+इस ZIP में ऐप की 5 जरूरी फाइलें सीधे मुख्य फोल्डर में हैं:
+1. index.html
+2. manifest.webmanifest
+3. sw.js
+4. icon-192.png
+5. icon-512.png
+
+GitHub पर अपलोड करते समय ZIP नहीं, इन 5 फाइलों को चुनें।
+सभी फाइलें repository के root/main page पर अपलोड करें, किसी अलग folder के अंदर नहीं।
+
+फिर GitHub Repository > Settings > Pages > Deploy from a branch चुनें।
+Branch: main, Folder: /(root), Save.
+Pages URL बनने के बाद Chrome में खोलें और ⋮ > Install app / Add to Home screen चुनें।
+
+महत्वपूर्ण: यह PWA है, APK नहीं। Play Store पर डालने के लिए अलग से Android App Bundle (AAB), privacy policy और Play Console प्रक्रिया की जरूरत हो सकती है।
+ब्याज दरें उदाहरण के लिए हैं, वर्तमान आधिकारिक दरें नहीं। सार्वजनिक उपयोग से पहले India Post की आधिकारिक वेबसाइट से दरें और नियम सत्यापित करें।
+यह India Post की आधिकारिक ऐप नहीं है।

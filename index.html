@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#b71c1c">
+<link rel="manifest" href="manifest.webmanifest">
+<title>India Post Updates</title>
+<style>
+:root{--red:#b71c1c;--cream:#fff8f0;--ink:#242424}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Arial,sans-serif;background:var(--cream);color:var(--ink)}
+header{background:var(--red);color:white;padding:18px 16px 20px}header h1{font-size:22px;margin:0 0 5px}header p{margin:0;font-size:13px}
+main{max-width:760px;margin:auto;padding:14px}.card{background:#fff;border-radius:14px;padding:16px;margin:0 0 14px;box-shadow:0 2px 9px #00000010}
+label{display:block;font-weight:600;margin:10px 0 6px}select,input{width:100%;padding:12px;border:1px solid #ccc;border-radius:9px;background:white;font-size:16px}
+button{border:0;background:var(--red);color:white;border-radius:9px;padding:12px 16px;font-size:16px;font-weight:650;width:100%;margin-top:14px}
+.result{font-size:25px;font-weight:750;color:var(--red);margin-top:8px}.small{font-size:12px;color:#666;line-height:1.5}.scheme{border-bottom:1px solid #eee;padding:10px 0}.scheme:last-child{border:0}
+footer{text-align:center;padding:8px 16px 24px;color:#666;font-size:12px}
+</style>
+</head>
+<body>
+<header><h1>🇮🇳 India Post Updates</h1><p>डाकघर बचत योजनाएँ और अनुमानित कैलकुलेटर</p></header>
+<main>
+<section class="card">
+<h2 style="margin:0 0 6px">बचत योजना कैलकुलेटर</h2>
+<p class="small">योजना चुनें और अनुमानित परिपक्वता राशि देखें। यह सामान्य अनुमान है; वास्तविक राशि डाकघर के नियमों, जमा की तारीख और लागू ब्याज दर पर निर्भर करेगी।</p>
+<label for="scheme">योजना</label>
+<select id="scheme">
+<option value="SB">Post Office Savings Account (SB)</option>
+<option value="RD">5-Year Recurring Deposit (RD)</option>
+<option value="TD1">Time Deposit – 1 Year</option>
+<option value="TD2">Time Deposit – 2 Years</option>
+<option value="TD3">Time Deposit – 3 Years</option>
+<option value="TD5">Time Deposit – 5 Years</option>
+<option value="MIS">Monthly Income Scheme (MIS)</option>
+<option value="NSC">National Savings Certificate (NSC)</option>
+<option value="KVP">Kisan Vikas Patra (KVP)</option>
+<option value="PPF">Public Provident Fund (PPF)</option>
+<option value="SSY">Sukanya Samriddhi Account (SSY)</option>
+<option value="SCSS">Senior Citizens Savings Scheme (SCSS)</option>
+</select>
+<label for="amount">जमा राशि (₹)</label><input id="amount" type="number" min="1" value="10000" inputmode="numeric">
+<label for="years">अवधि (वर्ष)</label><input id="years" type="number" min="1" max="30" value="5" inputmode="numeric">
+<button id="calculate">अनुमानित राशि निकालें</button>
+<div id="result" aria-live="polite"></div>
+<p class="small" id="note"></p>
+</section>
+<section class="card">
+<h2 style="margin-top:0">योजनाओं की सूची</h2>
+<div class="scheme"><b>SB</b> — बचत खाता</div>
+<div class="scheme"><b>RD</b> — आवर्ती जमा</div>
+<div class="scheme"><b>TD</b> — सावधि जमा (1, 2, 3 और 5 वर्ष)</div>
+<div class="scheme"><b>MIS</b> — मासिक आय योजना</div>
+<div class="scheme"><b>NSC</b> — राष्ट्रीय बचत प्रमाणपत्र</div>
+<div class="scheme"><b>KVP</b> — किसान विकास पत्र</div>
+<div class="scheme"><b>PPF</b> — सार्वजनिक भविष्य निधि</div>
+<div class="scheme"><b>SSY</b> — सुकन्या समृद्धि खाता</div>
+<div class="scheme"><b>SCSS</b> — वरिष्ठ नागरिक बचत योजना</div>
+</section>
+<section class="card">
+<h3 style="margin-top:0">महत्वपूर्ण सूचना</h3>
+<p class="small">यह स्वतंत्र जानकारी/कैलकुलेटर ऐप है, India Post की आधिकारिक ऐप नहीं है। ब्याज दरें और नियम बदल सकते हैं। उपयोग से पहले India Post की आधिकारिक वेबसाइट या नजदीकी डाकघर से वर्तमान दरों और नियमों की पुष्टि करें। परिणाम केवल अनुमान हैं।</p>
+<button id="share" type="button">ऐप शेयर करें</button>
+</section>
+</main>
+<footer>India Post Updates · स्वतंत्र जानकारी ऐप</footer>
+<script>
+const rates={SB:0.04,RD:0.065,TD1:0.068,TD2:0.07,TD3:0.071,TD5:0.075,MIS:0.074,NSC:0.077,KVP:0.075,PPF:0.071,SSY:0.082,SCSS:0.082};
+const names={SB:"SB",RD:"RD",TD1:"TD 1 वर्ष",TD2:"TD 2 वर्ष",TD3:"TD 3 वर्ष",TD5:"TD 5 वर्ष",MIS:"MIS",NSC:"NSC",KVP:"KVP",PPF:"PPF",SSY:"SSY",SCSS:"SCSS"};
+const money=n=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(n);
+function calc(){
+ let s=document.querySelector('#scheme').value, p=Number(document.querySelector('#amount').value), y=Math.max(1,Number(document.querySelector('#years').value)||1), r=rates[s], total, note="प्रदर्शित ब्याज दर केवल उदाहरण के लिए है; वर्तमान आधिकारिक दर की पुष्टि करें।";
+ if(!p||p<1){document.querySelector('#result').innerHTML='<p>कृपया सही जमा राशि दर्ज करें।</p>';return}
+ if(s==='RD'){let n=Math.max(1,Math.round(y*12)); total=p*n + p*r*n*(n+1)/24; note="RD में जमा राशि को मासिक किस्त मानकर सरल अनुमान लगाया गया है।"}
+ else if(s==='MIS'||s==='SCSS'){total=p*Math.pow(1+r,Math.min(y,5));note="MIS/SCSS की वास्तविक आय और भुगतान नियम इस सरल अनुमान से अलग हो सकते हैं।"}
+ else if(s==='KVP'){total=p*Math.pow(2,Math.min(y,10)/10);note="KVP की परिपक्वता अवधि और राशि लागू नियमों पर निर्भर करती है।"}
+ else if(s==='NSC'){total=p*Math.pow(1+r,Math.min(y,5));note="NSC का वास्तविक परिपक्वता मूल्य निर्धारित अवधि और आधिकारिक दर से तय होता है।"}
+ else {total=p*Math.pow(1+r,y); if(s==='PPF'||s==='SSY')note="PPF/SSY में वार्षिक जमा, सीमा, वित्तीय वर्ष और निकासी नियम लागू होते हैं; यह एकमुश्त जमा का सरल अनुमान है."}
+ document.querySelector('#result').innerHTML='<div class="small">योजना: '+names[s]+'</div><div class="result">'+money(total)+'</div><div class="small">अनुमानित कुल राशि (मूलधन सहित)</div>';
+ document.querySelector('#note').textContent=note;
+}
+document.querySelector('#calculate').addEventListener('click',calc);calc();
+document.querySelector('#share').addEventListener('click',async()=>{const data={title:'India Post Updates',text:'India Post Updates — डाकघर बचत योजनाओं की जानकारी और अनुमानित कैलकुलेटर',url:location.href};try{if(navigator.share)await navigator.share(data);else alert('इस ऐप का लिंक ब्राउज़र से कॉपी करके शेयर करें: '+location.href)}catch(e){}});
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
